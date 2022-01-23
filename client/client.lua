@@ -27,9 +27,14 @@ RegisterKeyMapping('tptoset', 'TP to location set with F11', 'keyboard', 'K')
 
 function TpGo()
 	if LocIsSet then
-		Citizen.Wait(200)
-		PlayerPedId()
-		SetEntityCoords(PlayerPedId(),loc)
+		if IsPedInAnyVehicle(PlayerPedId()) then
+			Citizen.Wait(200)
+			SetEntityCoords(GetVehiclePedIsUsing(PlayerPedId()),loc)
+		else
+			Citizen.Wait(200)
+			SetEntityCoords(PlayerPedId(),loc)
+		end
+		
 	else
 		BeginTextCommandThefeedPost("notificationSomething2")
 		EndTextCommandThefeedPostTicker(true, true)
