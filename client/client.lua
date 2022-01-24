@@ -1,4 +1,10 @@
 
+
+-- Config
+local autorepair = true -- Auto repair vehicles
+
+
+-- Don't Touch
 local LocIsSet = false
 local loc = nil
 AddTextEntry("notificationSomething", "[TP Set] You have set the location.")
@@ -28,8 +34,15 @@ RegisterKeyMapping('tptoset', 'TP to location set with F11', 'keyboard', 'K')
 function TpGo()
 	if LocIsSet then
 		if IsPedInAnyVehicle(PlayerPedId()) then
+			local vehicle = GetVehiclePedIsUsing(PlayerPedId())
 			Citizen.Wait(200)
-			SetEntityCoords(GetVehiclePedIsUsing(PlayerPedId()),loc)
+			SetEntityCoords(vehicle,loc)
+			if autorepair then
+				SetVehicleEngineHealth(vehicle, 1000)
+				SetVehicleDirtLevel(vehicle, 0)
+				SetVehicleEngineOn(vehicle, true, true )
+				SetVehicleFixed(vehicle)
+			end
 		else
 			Citizen.Wait(200)
 			SetEntityCoords(PlayerPedId(),loc)
