@@ -7,15 +7,16 @@ local autorepair = true -- Auto repair vehicles
 -- Don't Touch
 local LocIsSet = false
 local loc = nil
+local heading = nil
 AddTextEntry("notificationSomething", "[TP Set] You have set the location.")
 AddTextEntry("notificationSomething2", "[TP Set] You have no location set!")
 RegisterCommand("tpset", function(source, args, rawCommand)
-
 	BeginTextCommandThefeedPost("notificationSomething")
 	EndTextCommandThefeedPostTicker(true, true)
 	LocIsSet = true
 	local ped = PlayerPedId()
 	loc = GetEntityCoords(ped)
+	heading = GetEntityHeading(ped)
 end, false)
 
 
@@ -37,6 +38,7 @@ function TpGo()
 			local vehicle = GetVehiclePedIsUsing(PlayerPedId())
 			Citizen.Wait(200)
 			SetEntityCoords(vehicle,loc)
+			SetEntityHeading(vehicle,heading)
 			if autorepair then
 				SetVehicleEngineHealth(vehicle, 1000)
 				SetVehicleDirtLevel(vehicle, 0)
@@ -46,6 +48,7 @@ function TpGo()
 		else
 			Citizen.Wait(200)
 			SetEntityCoords(PlayerPedId(),loc)
+			SetEntityHeading(PlayerPedId(),heading)
 		end
 		
 	else
